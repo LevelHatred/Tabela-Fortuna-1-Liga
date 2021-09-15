@@ -17,20 +17,25 @@ public class OkienkoGUI extends JFrame{
 	 */
 	private static final long serialVersionUID = -4982292960425747281L;
 
+	// zmienne klasy
 	private Container kontenerBorderCenter = new Container();
 	private JScrollPane suwakTabeli = new JScrollPane();
 	private JTable tabela = new JTable();
 	
-	private Vector<Vector<String>> dane;
+	private Vector<Vector<String>> dane = new Vector<>();
 	
-	public OkienkoGUI() {
+	
+	// konstruowanie klasy
+	public OkienkoGUI(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
 		stworzGUI();
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		dodanieNaglowkowTabeli();
 		szerokoscNaglowkowTabeli(tabela, 1000, new double[] {1,7,1,1,1,1,1,1,1});
 		dodanieTabeli();
+		poczatkoweDaneTabeli(alfabetycznaListaDruzyn);
 	}
 
+	// stworz okienko, wymiar, wybierz Layout, umieœæ na œrodku
 	private void stworzGUI() {
 		this.setTitle("Fortuna 1 Liga");
 		this.setLayout(new BorderLayout(10,10));
@@ -38,6 +43,7 @@ public class OkienkoGUI extends JFrame{
 		this.setLocationRelativeTo(null);
 	}
 	
+	// dodaj nag³ówki tabeli
 	private void dodanieNaglowkowTabeli() {
 		Vector<String> naglowki = new Vector<>();
 		naglowki.add("Lp");
@@ -53,6 +59,7 @@ public class OkienkoGUI extends JFrame{
 		tabela = new JTable(dane, naglowki);		
 	}
 	
+	// ustaw szerokoœæ kolumn tabeli
 	private void szerokoscNaglowkowTabeli(JTable tabela, int szerokoscTabeli, double... wypelnienie) {
 		double suma = 0;
 		for (int i=0; i < tabela.getColumnModel().getColumnCount(); i++) {
@@ -64,12 +71,26 @@ public class OkienkoGUI extends JFrame{
 		}
 	}
 	
+	// dodaj tabelê do suwaka i ca³oœæ do okienka
 	private void dodanieTabeli() {
 		suwakTabeli = new JScrollPane(tabela);
 		this.add(kontenerBorderCenter, BorderLayout.CENTER);
 		kontenerBorderCenter.setLayout(new GridLayout());	
 		kontenerBorderCenter.add(suwakTabeli);
-		tabela.setDefaultEditor(Object.class, null);
-		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setDefaultEditor(Object.class, null); // brak mo¿liwoœci edytowania komórki tabeli
+		tabela.getTableHeader().setReorderingAllowed(false); // brak reorganizacji kolejnoœci kolumn tabeli
+	}
+	
+	private void poczatkoweDaneTabeli(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+		for(int i=0; i<alfabetycznaListaDruzyn.pobierzListeDruzyn().length; i++) {
+			Vector<String> tempDane = new Vector<>();
+			tempDane.add(String.valueOf(i+1));
+			tempDane.add(alfabetycznaListaDruzyn.pobierzListeDruzyn()[i]);
+			for (int j=0; j<7; j++) {
+				tempDane.add(String.valueOf(0));
+			}
+			dane.add(tempDane);
+		}
+		
 	}
 }
