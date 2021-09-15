@@ -1,63 +1,70 @@
 package tabela1Ligi;
 
-import java.io.IOException;
-
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class RezultatyMeczow {
+	// zmienne klasy
 	private static String [][] rezultatyMeczow;
+	private static Elements gospodarze, wyniki, goscie;
 	
-	public RezultatyMeczow(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
-		rezultatyMeczow=stworzTabeleRezultatow(alfabetycznaListaDruzyn);
-//		for(int i=0; i<19;i++) {
-//			for(int j=0; j<19;j++) {
-//				System.out.print(rezultatyMeczow[i][j]+"\t\t");
-//			}
-//			System.out.println();
-//		}
+	// konstruowanie klasy
+	public RezultatyMeczow() {
+		rezultatyMeczow=stworzTabeleRezultatow();
 	}
 	
-	private static String[][] stworzTabeleRezultatow(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
-		String[] temp1=alfabetycznaListaDruzyn.pobierzListeDruzyn();
-		String[][] temp2 = new String[19][19];
-		for(int gospodarz=0; gospodarz<19; gospodarz++) {
-			for(int gosc=0; gosc<19; gosc++) {
-				if(gospodarz==0 && gosc==0) {
-					temp2[gospodarz][gosc]="Dru¿yny";
-				}
-				else if(gospodarz==gosc) {
-					temp2[gospodarz][gosc]="x";
-				}
-				else if(gospodarz==0 && gosc!=0) {
-					temp2[gospodarz][gosc]=temp1[gosc-1];
-				}
-				else if(gospodarz!=0 && gosc==0) {
-					temp2[gospodarz][gosc]=temp1[gospodarz-1];
+	// generowanie tablicy wynikow do tabeli
+	private static String[][] stworzTabeleRezultatow() {
+		String[][] temp = new String[18][18];
+		for(int gospodarz=0; gospodarz<18; gospodarz++) {
+			for(int gosc=0; gosc<18; gosc++) {
+				if(gospodarz==gosc) {
+					temp[gospodarz][gosc]="x";
 				}
 				else {
-					temp2[gospodarz][gosc]="-";
+					temp[gospodarz][gosc]="-";
 				}
 			}
 		}
-		return temp2;
+		return temp;
 	}
-
-	public void uzupelnijWyniki() {
-		Connection polaczenie = Jsoup.connect("http://www.polskapilka.net/1-liga/");
-		Document dokument;
-		try {
-			dokument = polaczenie.get();
-			Elements gospodarze = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_left]").select("p");
-			Elements wyniki = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=result]");
-			Elements goscie = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_right]").select("p");
-			String test = wyniki.html();
-			System.out.println(test);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	// pobieranie wyników meczów do listy
+	public void pobierzWyniki() {
+		Polaczenie polaczenie = new Polaczenie("http://www.polskapilka.net/1-liga/");
+		Document dokument = polaczenie.dajDokument();
+		gospodarze = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_left]").select("p");
+		wyniki = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=result]");
+		goscie = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_right]").select("p");
+	}
+	// przepisywanie wyników z listy do tablicy
+	public void uzupelnijWyniki(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+		String[] listaGospodarze =gospodarze.html().split("\n");
+		String[] listaWyniki = wyniki.html().split("\n");
+		String[] listaGoscie = goscie.html().split("\n");
+		int nrGospodarza=0;
+		int nrGoscia=0;
+		for(int i=0; i<listaGospodarze.length; i++) {
+			for(int j=0; j<18; j++) {
+				if(listaGospodarze[i].equals(alfabetycznaListaDruzyn.pobierzListeDruzyn()[j])) {
+					nrGospodarza=j;
+					break;
+				}
+			}
+			for(int j=0; j<18; j++) {
+				if(listaGoscie[i].equals(alfabetycznaListaDruzyn.pobierzListeDruzyn()[j])) {
+					nrGoscia=j;
+					break;
+				}
+			}
+			rezultatyMeczow[nrGospodarza][nrGoscia]=listaWyniki[i];
+		}
+		
+		//tymczasowo wyswietl format wynikow
+		for(int i=0; i<18;i++) {
+			for(int j=0; j<18;j++) {
+				System.out.print(rezultatyMeczow[i][j]+"\t");
+			}
+			System.out.println();
 		}
 	}
 }

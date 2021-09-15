@@ -1,25 +1,27 @@
 package tabela1Ligi;
 
-import java.io.IOException;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class AlfabetycznaListaDruzyn {
-	private static String[] alfabetycznaListaDruzyn; //lista druzyn
+	// zmienne klasy
+	private static String[] alfabetycznaListaDruzyn;
 	
-	//konstruowanie klasy
+	// konstruowanie klasy
 	public AlfabetycznaListaDruzyn() {
-		Polaczenie polaczenie = new Polaczenie();
+		// ³¹czenie siê z baz¹ informacji
+		Polaczenie polaczenie = new Polaczenie("http://www.polskapilka.net/1-liga/");
 		Document dokument = polaczenie.dajDokument();
-		Elements duzyBox = dokument.getElementsByClass("box5");	// wyodrêbnij klase box5
-		Elements tabelaLigowa = duzyBox.select("table[class=table-ligowa]").select("td[class=td2]").select("a"); // wyodrêbnij element a href
-		String niesortowaneDruzyny = tabelaLigowa.html(); // wyodrêbnij same nazwy
-		alfabetycznaListaDruzyn = niesortowaneDruzyny.split("\n"); // podziel nazwy klubów na tablice stringów, bez sortowania
 		
-		//sortowanie nazw
-		for(int i=0; i<17;i++) {
-			for(int j=0; j<17;j++) {
+		// wyodrêbnianie ze strony samych nazw klubów, bez sortowania do tablicy stringów
+		Elements duzyBox = dokument.getElementsByClass("box5");	
+		Elements tabelaLigowa = duzyBox.select("table[class=table-ligowa]").select("td[class=td2]").select("a");
+		String niesortowaneDruzyny = tabelaLigowa.html(); 
+		alfabetycznaListaDruzyn = niesortowaneDruzyny.split("\n");
+		
+		// sortowanie b¹belkowe nazw klubów
+		for(int i=0; i<17; i++) {
+			for(int j=0; j<17; j++) {
 				if(alfabetycznaListaDruzyn[j].compareTo(alfabetycznaListaDruzyn[j+1])>0) {
 					String temp = alfabetycznaListaDruzyn[j+1];
 					alfabetycznaListaDruzyn[j+1]=alfabetycznaListaDruzyn[j];
@@ -28,13 +30,17 @@ public class AlfabetycznaListaDruzyn {
 			}
 		}
 		
+		// odkomentowanie do zobaczenia listy dru¿yn bior¹cych udzia³ w rozgrywkach
+//		for(int i=0; i<18; i++) {
+//			System.out.println(alfabetycznaListaDruzyn[i]);
+//		}
 	}
 	
 	public String[] pobierzListeDruzyn() {
 		return alfabetycznaListaDruzyn;
 	}
 
-// lista druzyn alfabetycznie do oznaczenia potem
+// lista dru¿ynn alfabetycznie do oznaczenia w przysz³ych dzia³aniach
 //	Arka Gdynia - 1
 //	Chrobry G³ogów - 2 
 //	GKS Jastrzêbie - 3

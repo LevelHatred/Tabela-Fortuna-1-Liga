@@ -8,10 +8,13 @@ import org.jsoup.nodes.Document;
 
 
 public class Polaczenie {
+	//zmienne klasy
 	private Connection polaczenie;
 	private Document dokument;
-	public Polaczenie() {
-		polaczenie = Jsoup.connect("http://www.polskapilka.net/1-liga/");
+	
+	//konstruowanie klasy
+	public Polaczenie(String s) {
+		polaczenie = Jsoup.connect(s);
 		try {
 			dokument = polaczenie.get();
 		} catch (IOException e) {
