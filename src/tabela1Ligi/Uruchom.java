@@ -11,7 +11,7 @@ public class Uruchom {
 		// uzupelnianie rezultatow do tablicy meczow
 		rezultatyMeczow.uzupelnijWyniki(alfabetycznaListaDruzyn);
 		
-		// otwórz okienko GUI z tabel¹
+		// otwórz okienko GUI z tabela
 		OkienkoGUI okienkoGUI = new OkienkoGUI(alfabetycznaListaDruzyn);
 		okienkoGUI.setVisible(true);
 	}
