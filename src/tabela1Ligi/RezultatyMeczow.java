@@ -56,9 +56,19 @@ public class RezultatyMeczow {
 					break;
 				}
 			}
-			rezultatyMeczow[nrGospodarza][nrGoscia]=listaWyniki[i];
+			if(rezultatyMeczow[nrGospodarza][nrGoscia].equals("-")==false) {
+				rezultatyMeczow[nrGoscia][nrGospodarza]=listaWyniki[i];
+			}
+			else {
+				rezultatyMeczow[nrGospodarza][nrGoscia]=listaWyniki[i];
+			}
+			
+			System.out.println(rezultatyMeczow[11][13]);
 		}
-		
+//		for(int i=0;i<listaGoscie.length;i++) {
+//			System.out.println(listaGospodarze[i] + " " + listaWyniki[i] + " "+ listaGoscie[i]);
+//		}
+		System.out.println("test" + rezultatyMeczow[11][13]);
 		//tymczasowo wyswietl format wynikow
 		for(int i=0; i<18;i++) {
 			for(int j=0; j<18;j++) {
@@ -66,5 +76,9 @@ public class RezultatyMeczow {
 			}
 			System.out.println();
 		}
+	}
+	
+	public String[][] dajRezultatyMeczow(){
+		return rezultatyMeczow;
 	}
 }

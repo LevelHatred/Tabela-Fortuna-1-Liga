@@ -6,9 +6,11 @@ import java.awt.GridLayout;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 public class OkienkoGUI extends JFrame{
@@ -26,20 +28,21 @@ public class OkienkoGUI extends JFrame{
 	
 	
 	// konstruowanie klasy
-	public OkienkoGUI(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+	public OkienkoGUI(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, Tabela tabelaZWynikami) {
 		stworzGUI();
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		dodanieNaglowkowTabeli();
 		szerokoscNaglowkowTabeli(tabela, 1000, new double[] {1,7,1,1,1,1,1,1,1});
 		dodanieTabeli();
 		poczatkoweDaneTabeli(alfabetycznaListaDruzyn);
+		uzupelnijTabele(tabelaZWynikami, alfabetycznaListaDruzyn);
 	}
 
 	// stworz okienko, wymiar, wybierz Layout, umieœæ na œrodku
 	private void stworzGUI() {
 		this.setTitle("Fortuna 1 Liga");
 		this.setLayout(new BorderLayout(10,10));
-		this.setSize(1366, 768);
+		this.setSize(683, 384);
 		this.setLocationRelativeTo(null);
 	}
 	
@@ -48,13 +51,13 @@ public class OkienkoGUI extends JFrame{
 		Vector<String> naglowki = new Vector<>();
 		naglowki.add("Lp");
 		naglowki.add("Druzyna");
-		naglowki.add("Mecze");
-		naglowki.add("Punkty");
-		naglowki.add("Wygrane");
-		naglowki.add("Remisy");
-		naglowki.add("Porazki");
-		naglowki.add("Bramki strzelone");
-		naglowki.add("Bramki stracone");
+		naglowki.add("M");
+		naglowki.add("Pkt");
+		naglowki.add("W");
+		naglowki.add("R");
+		naglowki.add("P");
+		naglowki.add("BZ");
+		naglowki.add("BS");
 		
 		tabela = new JTable(dane, naglowki);		
 	}
@@ -68,6 +71,14 @@ public class OkienkoGUI extends JFrame{
 		for (int i=0; i < tabela.getColumnModel().getColumnCount(); i++) {
 			TableColumn kolumna = tabela.getColumnModel().getColumn(i);
 			kolumna.setPreferredWidth((int) (szerokoscTabeli * (wypelnienie[i] / suma)));
+		}
+		for (int i=0; i < tabela.getColumnModel().getColumnCount(); i++) {
+			if(i==1) {
+				continue;
+			}
+			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+			tabela.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
 		}
 	}
 	
@@ -91,6 +102,29 @@ public class OkienkoGUI extends JFrame{
 			}
 			dane.add(tempDane);
 		}
-		
+	}
+	
+	private void uzupelnijTabele(Tabela tabelaZWynikami, AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+		int[] rozegraneMeczeTabela = tabelaZWynikami.paczkaDanychTabeli()[0];
+		int[] punkty = tabelaZWynikami.paczkaDanychTabeli()[1];
+		int[] wygrane = tabelaZWynikami.paczkaDanychTabeli()[2];
+		int[] remisy = tabelaZWynikami.paczkaDanychTabeli()[3];
+		int[] porazki = tabelaZWynikami.paczkaDanychTabeli()[4];
+		int[] bramkiStrzelone = tabelaZWynikami.paczkaDanychTabeli()[5];
+		int[] bramkiStracone = tabelaZWynikami.paczkaDanychTabeli()[6];
+		dane.clear();
+		for(int i=0; i<alfabetycznaListaDruzyn.pobierzListeDruzyn().length; i++) {
+			Vector<String> tempDane = new Vector<>();
+			tempDane.add(String.valueOf(i+1));
+			tempDane.add(tabelaZWynikami.druzynyTabela[i]);
+			tempDane.add(String.valueOf(rozegraneMeczeTabela[i]));
+			tempDane.add(String.valueOf(punkty[i]));
+			tempDane.add(String.valueOf(wygrane[i]));
+			tempDane.add(String.valueOf(remisy[i]));
+			tempDane.add(String.valueOf(porazki[i]));
+			tempDane.add(String.valueOf(bramkiStrzelone[i]));
+			tempDane.add(String.valueOf(bramkiStracone[i]));
+			dane.add(tempDane);
+		}
 	}
 }
