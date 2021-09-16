@@ -1,0 +1,169 @@
+Sezony 2021/2022
+
+Anglia - Premier League (20 druzyn)
+Arsenal
+Aston Villa
+Brentford
+Brighton
+Burnley
+Chelsea
+Crystal Palace
+Everton
+Leeds
+Leicester
+Liverpool
+Manchester City
+Manchester United
+Newcastle
+Norwich
+Southampton
+Tottenham
+Watford
+West Ham United
+Wolverhampton
+
+Francja - Ligue 1 (20 druzyn)
+Angers
+Bordeaux
+Brest
+Clermont
+Lens
+Lille
+Lorient
+Lyon
+Marsylia
+Metz
+Monako
+Montpellier
+Nantes
+Nice - -1 punkt
+PSG
+Reims
+Rennes
+Saint-Etienne
+Strasburg
+Troyes
+
+Hiszpania - La Liga (20 druzyn)
+Alaves
+Athletic Bilbao
+Atletico Madryt
+Barcelona
+Betis Sevilla
+Cadiz
+Celta Vigo
+Elche
+Espanyol
+Getafe
+Granada
+Levante
+Mallorca
+Osasuna
+Real Madryt
+Real Sociedad
+Sevilla
+Valencia
+Vallecano
+Villarreal
+
+Niemcy - Bundesliga (18 druzyn)
+Arminia Bielefeld
+Augsburg
+Bayer Leverkusen
+Bayern Monachium
+Bochum
+Borussia Dortmund
+Borussia M'gladbach
+Frankfurt
+Freiburg
+Furth
+Hertha Berlin
+Hoffenheim
+Koeln
+Lipsk
+Mainz
+Stuttgart
+Union Berlin
+Wolfsburg
+
+Wlochy - Serie A (20 druzyn)
+Atalanta
+Bologna
+Cagliari
+Empoli
+Fiorentina
+Genoa
+Inter
+Juventus
+Lazio
+Milan
+Napoli
+Roma
+Salernitana
+Sampdoria
+Sassuolo
+Spezia
+Torino
+Udinese
+Venezia
+Verona
+
+Polska - Ekstraklasa (18 druzyn)
+Cracovia
+Górnik Zabrze
+Górnik Łęczna
+Jagiellonia Białystok
+Lech Poznań
+Lechia Gdańsk
+Legia Warszawa
+Piast Gliwice
+Pogoń Szczecin
+Radomiak Radom
+Raków Częstochowa
+Stal Mielec
+Termalica Nieciecza
+Warta Poznań
+Wisła Kraków
+Wisła Płock
+Zagłębie Lubin
+Śląsk Wrocław
+
+Polska - 1 liga (18 druzyn)
+Arka Gdynia
+Chrobry Głogów
+GKS Jastrzębie
+GKS Katowice
+GKS Tychy
+Górnik Polkowice
+Korona Kielce
+Miedź Legnica
+Odra Opole
+Podbeskidzie Bielsko-Biała
+Puszcza Niepołomice
+Resovia
+Sandecja Nowy Sącz
+Skra Częstochowa
+Stomil Olsztyn
+Widzew Łódź
+Zagłębie Sosnowiec
+ŁKS Łódź
+
+Polska - 2 liga (18 druzyn)
+Chojniczanka Chojnice
+GKS Bełchatów - -4 punkty
+Garbarnia Kraków
+Hutnik Kraków
+KKS Kalisz
+Lech II Poznań
+Motor Lublin
+Olimpia Elbląg
+Pogoń Grodzisk Mazow.
+Pogoń Siedlce
+Radunia Stężyca
+Ruch Chorzów
+Sokół Ostróda
+Stal Rzeszów
+Wigry Suwałki
+Wisła Puławy
+Znicz Pruszków
+Śląsk II Wrocław

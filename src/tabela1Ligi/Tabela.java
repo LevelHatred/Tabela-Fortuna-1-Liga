@@ -1,17 +1,31 @@
 package tabela1Ligi;
 
 public class Tabela {
-	String[] druzynyTabela = new String[18];
-	private int[] rozegraneMeczeTabela = new int[18];
-	private int[] punkty = new int[18];
-	private int[] wygrane = new int[18];
-	private int[] remisy = new int[18];
-	private int[] porazki = new int[18];
-	private int[] bramkiStrzelone = new int[18];
-	private int[] bramkiStracone = new int[18];
+	// zmienne klasy
+	String[] druzynyTabela;
+	private int[] rozegraneMeczeTabela;
+	private int[] punkty;
+	private int[] wygrane;
+	private int[] remisy;
+	private int[] porazki;
+	private int[] bramkiStrzelone;
+	private int[] bramkiStracone;
 	
+	// konstruowanie klasy
 	public Tabela(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, RezultatyMeczow rezultatyMeczow) {
-		for(int i=0; i<18; i++) {
+		// inicjowanie danych tabeli
+		int liczbaDruzyn=rezultatyMeczow.dajRezultatyMeczow().length;
+		druzynyTabela = new String[liczbaDruzyn];
+		rozegraneMeczeTabela = new int[liczbaDruzyn];
+		punkty = new int[liczbaDruzyn];
+		wygrane = new int[liczbaDruzyn];
+		remisy = new int[liczbaDruzyn];
+		porazki = new int[liczbaDruzyn];
+		bramkiStrzelone = new int[liczbaDruzyn];
+		bramkiStracone = new int[liczbaDruzyn];
+		
+		// wypelnianie danych takich jak mecze, bramki etc druzyn zerami
+		for(int i=0; i<liczbaDruzyn; i++) {
 			druzynyTabela[i]=alfabetycznaListaDruzyn.pobierzListeDruzyn()[i];
 			rozegraneMeczeTabela[i]=0;
 			punkty[i]=0;
@@ -22,12 +36,17 @@ public class Tabela {
 			bramkiStracone[i]=0;
 			
 		}
-		for(int i=0; i<18; i++) {
-			for(int j=0; j<18; j++) {
+		
+		// uwzglednianie rezultatow meczy do tabeli
+		for(int i=0; i<liczbaDruzyn; i++) {
+			for(int j=0; j<liczbaDruzyn; j++) {
 				if(i==j) {
 					continue;
 				}
 				else if(rezultatyMeczow.dajRezultatyMeczow()[i][j].equals("-")) {
+					continue;
+				}
+				else if(rezultatyMeczow.dajRezultatyMeczow()[i][j].equals("-:-")) {
 					continue;
 				}
 				else {
@@ -67,8 +86,10 @@ public class Tabela {
 				}
 			}
 		}
-		for(int i=0; i<17; i++) {
-			for(int j=0; j<17; j++) {
+		
+		// sortowanie tabeli po punktach druzyn
+		for(int i=0; i<liczbaDruzyn-1; i++) {
+			for(int j=0; j<liczbaDruzyn-1; j++) {
 				if(punkty[j]<punkty[j+1]) {
 					int temp1, temp2, temp3, temp4, temp5, temp6, temp7;
 					String tempS = druzynyTabela[j];

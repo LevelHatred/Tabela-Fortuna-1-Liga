@@ -9,24 +9,25 @@ public class RezultatyMeczow {
 	private static Elements gospodarze, wyniki, goscie;
 	
 	// konstruowanie klasy
-	public RezultatyMeczow() {
-		rezultatyMeczow=stworzTabeleRezultatow();
+	public RezultatyMeczow(AlfabetycznaListaDruzyn ALD) {
+		rezultatyMeczow=stworzTabeleRezultatow(ALD);
 	}
 	
 	// generowanie tablicy wynikow do tabeli
-	private static String[][] stworzTabeleRezultatow() {
-		String[][] temp = new String[18][18];
-		for(int gospodarz=0; gospodarz<18; gospodarz++) {
-			for(int gosc=0; gosc<18; gosc++) {
+	private static String[][] stworzTabeleRezultatow(AlfabetycznaListaDruzyn ALD) {
+		int liczbaDruzyn = ALD.pobierzListeDruzyn().length;
+		String[][] tablicaWynikow = new String[liczbaDruzyn][liczbaDruzyn];
+		for(int gospodarz=0; gospodarz<liczbaDruzyn; gospodarz++) {
+			for(int gosc=0; gosc<liczbaDruzyn; gosc++) {
 				if(gospodarz==gosc) {
-					temp[gospodarz][gosc]="x";
+					tablicaWynikow[gospodarz][gosc]="x";
 				}
 				else {
-					temp[gospodarz][gosc]="-";
+					tablicaWynikow[gospodarz][gosc]="-:-";
 				}
 			}
 		}
-		return temp;
+		return tablicaWynikow;
 	}
 	// pobieranie wyników meczów do listy
 	public void pobierzWyniki() {
@@ -37,47 +38,47 @@ public class RezultatyMeczow {
 		goscie = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_right]").select("p");
 	}
 	// przepisywanie wyników z listy do tablicy
-	public void uzupelnijWyniki(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+	public void uzupelnijWyniki(AlfabetycznaListaDruzyn ALD) {
+		String[] listaDruzyn = ALD.pobierzListeDruzyn();
+		int liczbaDruzyn = ALD.pobierzListeDruzyn().length;
 		String[] listaGospodarze =gospodarze.html().split("\n");
 		String[] listaWyniki = wyniki.html().split("\n");
 		String[] listaGoscie = goscie.html().split("\n");
 		int nrGospodarza=0;
 		int nrGoscia=0;
 		for(int i=0; i<listaGospodarze.length; i++) {
-			for(int j=0; j<18; j++) {
-				if(listaGospodarze[i].equals(alfabetycznaListaDruzyn.pobierzListeDruzyn()[j])) {
+			for(int j=0; j<liczbaDruzyn; j++) {
+				if(listaGospodarze[i].equals(listaDruzyn[j])) {
 					nrGospodarza=j;
 					break;
 				}
 			}
-			for(int j=0; j<18; j++) {
-				if(listaGoscie[i].equals(alfabetycznaListaDruzyn.pobierzListeDruzyn()[j])) {
+			for(int j=0; j<liczbaDruzyn; j++) {
+				if(listaGoscie[i].equals(listaDruzyn[j])) {
 					nrGoscia=j;
 					break;
 				}
 			}
-			if(rezultatyMeczow[nrGospodarza][nrGoscia].equals("-")==false) {
+			if(rezultatyMeczow[nrGospodarza][nrGoscia].equals("-:-")==false) {
 				rezultatyMeczow[nrGoscia][nrGospodarza]=listaWyniki[i];
 			}
 			else {
 				rezultatyMeczow[nrGospodarza][nrGoscia]=listaWyniki[i];
 			}
-			
-			System.out.println(rezultatyMeczow[11][13]);
 		}
+		// wyswietlanie listy dostepnych kolejek
 //		for(int i=0;i<listaGoscie.length;i++) {
 //			System.out.println(listaGospodarze[i] + " " + listaWyniki[i] + " "+ listaGoscie[i]);
 //		}
-		System.out.println("test" + rezultatyMeczow[11][13]);
 		//tymczasowo wyswietl format wynikow
-		for(int i=0; i<18;i++) {
-			for(int j=0; j<18;j++) {
+		for(int i=0; i<liczbaDruzyn;i++) {
+			for(int j=0; j<liczbaDruzyn;j++) {
 				System.out.print(rezultatyMeczow[i][j]+"\t");
 			}
 			System.out.println();
 		}
 	}
-	
+	// zwroc tabele rezultatow
 	public String[][] dajRezultatyMeczow(){
 		return rezultatyMeczow;
 	}

@@ -24,6 +24,8 @@ public class OkienkoGUI extends JFrame{
 	private JScrollPane suwakTabeli = new JScrollPane();
 	private JTable tabela = new JTable();
 	
+	private Container kontererBorderSouth = new Container();
+	
 	private Vector<Vector<String>> dane = new Vector<>();
 	
 	

@@ -5,7 +5,7 @@ public class Uruchom {
 	public static void main(String[] args) {
 		// generowanie pierwotnych informacji, pobranie listy dru¿yn i rezultatów znanych meczów
 		AlfabetycznaListaDruzyn alfabetycznaListaDruzyn = new AlfabetycznaListaDruzyn();
-		RezultatyMeczow rezultatyMeczow = new RezultatyMeczow();
+		RezultatyMeczow rezultatyMeczow = new RezultatyMeczow(alfabetycznaListaDruzyn);
 		rezultatyMeczow.pobierzWyniki();
 		
 		// uzupelnianie rezultatow do tablicy meczow
