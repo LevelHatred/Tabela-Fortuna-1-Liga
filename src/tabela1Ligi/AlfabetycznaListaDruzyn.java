@@ -8,9 +8,9 @@ public class AlfabetycznaListaDruzyn {
 	private static String[] alfabetycznaListaDruzyn;
 	
 	// konstruowanie klasy
-	public AlfabetycznaListaDruzyn() {
+	public AlfabetycznaListaDruzyn(String adresWWW) {
 		// ³¹czenie siê z baz¹ informacji
-		Polaczenie polaczenie = new Polaczenie("http://www.polskapilka.net/1-liga/");
+		Polaczenie polaczenie = new Polaczenie(adresWWW);
 		Document dokument = polaczenie.dajDokument();
 		
 		// wyodrêbnianie ze strony samych nazw klubów, bez sortowania do tablicy stringów

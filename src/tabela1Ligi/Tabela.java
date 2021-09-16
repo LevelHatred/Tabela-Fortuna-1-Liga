@@ -49,6 +49,9 @@ public class Tabela {
 				else if(rezultatyMeczow.dajRezultatyMeczow()[i][j].equals("-:-")) {
 					continue;
 				}
+				else if(rezultatyMeczow.dajRezultatyMeczow()[i][j].equals("<br>Odwo³any")) {
+					continue;
+				}
 				else {
 					int gospodarz = i;
 					int gosc = j;

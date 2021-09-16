@@ -2,9 +2,11 @@ package tabela1Ligi;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Vector;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -12,6 +14,8 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import tabela1Ligi.WyborLigi.KrajLigi;
 
 public class OkienkoGUI extends JFrame{
 	/**
@@ -24,27 +28,38 @@ public class OkienkoGUI extends JFrame{
 	private JScrollPane suwakTabeli = new JScrollPane();
 	private JTable tabela = new JTable();
 	
-	private Container kontererBorderSouth = new Container();
-	
 	private Vector<Vector<String>> dane = new Vector<>();
 	
+	private Container kontenerBorderNorth = new Container();
+	private Container kontenerBorderSouth = new Container();
+	
+	private String[] magazynNazwLig = new String[] {"Anglia - Premier League",
+			"Francja - Ligue 1",
+			"Hiszpania - La Liga",
+			"Niemcy - Bundesliga",
+			"Polska - PKO Ekstraklasa",
+			"Polska - Fortuna 1 Liga",
+			"Polska - 2 Liga",
+			"W³ochy - Serie A"};
+	private JComboBox<String> wyborLigiJCB;
 	
 	// konstruowanie klasy
-	public OkienkoGUI(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, Tabela tabelaZWynikami) {
+	public OkienkoGUI() {
 		stworzGUI();
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		dodanieNaglowkowTabeli();
 		szerokoscNaglowkowTabeli(tabela, 1000, new double[] {1,7,1,1,1,1,1,1,1});
 		dodanieTabeli();
-		poczatkoweDaneTabeli(alfabetycznaListaDruzyn);
-		uzupelnijTabele(tabelaZWynikami, alfabetycznaListaDruzyn);
+		dodanieWyboruLigi();
+		poczatkoweDaneTabeli();
+		
 	}
 
 	// stworz okienko, wymiar, wybierz Layout, umieœæ na œrodku
 	private void stworzGUI() {
-		this.setTitle("Fortuna 1 Liga");
+		this.setTitle("Tabele rozgrywek pi³karskich");
 		this.setLayout(new BorderLayout(10,10));
-		this.setSize(683, 384);
+		this.setSize(683, 500);
 		this.setLocationRelativeTo(null);
 	}
 	
@@ -94,7 +109,48 @@ public class OkienkoGUI extends JFrame{
 		tabela.getTableHeader().setReorderingAllowed(false); // brak reorganizacji kolejnoœci kolumn tabeli
 	}
 	
-	private void poczatkoweDaneTabeli(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {
+	// tworzenie 
+	private void dodanieWyboruLigi() {
+		this.add(kontenerBorderNorth, BorderLayout.NORTH);
+		wyborLigiJCB = new JComboBox<String>(magazynNazwLig);
+		kontenerBorderNorth.setLayout(new FlowLayout(FlowLayout.CENTER));
+		kontenerBorderNorth.add(wyborLigiJCB);
+		wyborLigiJCB.setSelectedItem(magazynNazwLig[5]);
+		
+		
+	}
+	
+	private void poczatkoweDaneTabeli() {
+		WyborLigi wyborLigi;
+		if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[0])) {
+			wyborLigi = new WyborLigi(KrajLigi.ANGLIA);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[1])) {
+			wyborLigi = new WyborLigi(KrajLigi.FRANCJA);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[2])) {
+			wyborLigi = new WyborLigi(KrajLigi.HISZPANIA);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[3])) {
+			wyborLigi = new WyborLigi(KrajLigi.NIEMCY);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[4])) {
+			wyborLigi = new WyborLigi(KrajLigi.POLSKA_EKSTRAKLASA);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[5])) {
+			wyborLigi = new WyborLigi(KrajLigi.POLSKA_1_LIGA);
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[6])) {
+			wyborLigi = new WyborLigi(KrajLigi.POLSKA_2_LIGA);
+		}
+		else {
+			wyborLigi = new WyborLigi(KrajLigi.W£OCHY);
+		}
+		AlfabetycznaListaDruzyn alfabetycznaListaDruzyn = new AlfabetycznaListaDruzyn(wyborLigi.dajAdresDoPobraniaDanych());
+		RezultatyMeczow rezultatyMeczow = new RezultatyMeczow(alfabetycznaListaDruzyn);
+		rezultatyMeczow.pobierzWyniki(wyborLigi.dajAdresDoPobraniaDanych());
+		rezultatyMeczow.uzupelnijWyniki(alfabetycznaListaDruzyn);
+		Tabela tabela = new Tabela(alfabetycznaListaDruzyn, rezultatyMeczow);
 		for(int i=0; i<alfabetycznaListaDruzyn.pobierzListeDruzyn().length; i++) {
 			Vector<String> tempDane = new Vector<>();
 			tempDane.add(String.valueOf(i+1));
@@ -104,6 +160,7 @@ public class OkienkoGUI extends JFrame{
 			}
 			dane.add(tempDane);
 		}
+		uzupelnijTabele(tabela, alfabetycznaListaDruzyn);
 	}
 	
 	private void uzupelnijTabele(Tabela tabelaZWynikami, AlfabetycznaListaDruzyn alfabetycznaListaDruzyn) {

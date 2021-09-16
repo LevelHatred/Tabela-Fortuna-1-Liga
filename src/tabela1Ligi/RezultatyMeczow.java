@@ -30,8 +30,8 @@ public class RezultatyMeczow {
 		return tablicaWynikow;
 	}
 	// pobieranie wyników meczów do listy
-	public void pobierzWyniki() {
-		Polaczenie polaczenie = new Polaczenie("http://www.polskapilka.net/1-liga/");
+	public void pobierzWyniki(String adresWWW) {
+		Polaczenie polaczenie = new Polaczenie(adresWWW);
 		Document dokument = polaczenie.dajDokument();
 		gospodarze = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_left]").select("p");
 		wyniki = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=result]");
