@@ -12,7 +12,7 @@ public class Tabela {
 	private int[] bramkiStracone;
 	
 	// konstruowanie klasy
-	public Tabela(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, RezultatyMeczow rezultatyMeczow) {
+	public Tabela(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, RezultatyMeczow rezultatyMeczow, WyborLigi wyborLigi) {
 		// inicjowanie danych tabeli
 		int liczbaDruzyn=rezultatyMeczow.dajRezultatyMeczow().length;
 		druzynyTabela = new String[liczbaDruzyn];
@@ -23,12 +23,14 @@ public class Tabela {
 		porazki = new int[liczbaDruzyn];
 		bramkiStrzelone = new int[liczbaDruzyn];
 		bramkiStracone = new int[liczbaDruzyn];
+		// zaimportowanie karnych punktow;
+		int[] karnePunkty = wyborLigi.pobierzKarnePunkty();
 		
-		// wypelnianie danych takich jak mecze, bramki etc druzyn zerami
+		// wypelnianie danych takich jak mecze, bramki etc druzyn zerami i dodanie karnych punktow
 		for(int i=0; i<liczbaDruzyn; i++) {
 			druzynyTabela[i]=alfabetycznaListaDruzyn.pobierzListeDruzyn()[i];
 			rozegraneMeczeTabela[i]=0;
-			punkty[i]=0;
+			punkty[i]=karnePunkty[i];
 			wygrane[i]=0;
 			remisy[i]=0;
 			porazki[i]=0;
@@ -53,8 +55,7 @@ public class Tabela {
 					continue;
 				}
 				else {
-					int gospodarz = i;
-					int gosc = j;
+					//gospodarz - i, gosc - j
 					rozegraneMeczeTabela[i]++;
 					rozegraneMeczeTabela[j]++;
 					String[] wynik = rezultatyMeczow.dajRezultatyMeczow()[i][j].split("-");
@@ -94,42 +95,67 @@ public class Tabela {
 		for(int i=0; i<liczbaDruzyn-1; i++) {
 			for(int j=0; j<liczbaDruzyn-1; j++) {
 				if(punkty[j]<punkty[j+1]) {
-					int temp1, temp2, temp3, temp4, temp5, temp6, temp7;
-					String tempS = druzynyTabela[j];
-					temp1 = rozegraneMeczeTabela[j];
-					temp2=punkty[j];
-					temp3=wygrane[j];
-					temp4=remisy[j];
-					temp5=porazki[j];
-					temp6=bramkiStrzelone[j];
-					temp7=bramkiStracone[j];
-					
-					druzynyTabela[j]=druzynyTabela[j+1];
-					rozegraneMeczeTabela[j]=rozegraneMeczeTabela[j+1];
-					punkty[j]=punkty[j+1];
-					wygrane[j]=wygrane[j+1];
-					remisy[j]=remisy[j+1];
-					porazki[j]=porazki[j+1];
-					bramkiStrzelone[j]=bramkiStrzelone[j+1];
-					bramkiStracone[j]=bramkiStracone[j+1];
-					
-					druzynyTabela[j+1]=tempS;
-					rozegraneMeczeTabela[j+1]=temp1;
-					punkty[j+1]=temp2;
-					wygrane[j+1]=temp3;
-					remisy[j+1]=temp4;
-					porazki[j+1]=temp5;
-					bramkiStrzelone[j+1]=temp6;
-					bramkiStracone[j+1]=temp7;
-					
+					this.zamianaMiejsc(j);
 				}
 			}
 		}
+		
+		// sortowanie po bilansie bramek w ramach tej samej ilosci punktow
+		for(int i=0; i<liczbaDruzyn-1; i++) {
+			for(int j=0; j<liczbaDruzyn-1; j++) {
+				if(punkty[j]==punkty[j+1]) {
+					if(bramkiStrzelone[j]-bramkiStracone[j]<bramkiStrzelone[j+1]-bramkiStracone[j+1]) {
+						this.zamianaMiejsc(j);
+					}
+					else if (bramkiStrzelone[j]-bramkiStracone[j]==bramkiStrzelone[j+1]-bramkiStracone[j+1]) {
+						if(bramkiStrzelone[j]<bramkiStrzelone[j+1]) {
+							this.zamianaMiejsc(j);
+						}
+					}
+				}
+
+			}
+		}
+
 	}
+	
+	// kod zamiany miejsc druzyn przy sortowaniu
+	private void zamianaMiejsc(int j) {
+		int temp1, temp2, temp3, temp4, temp5, temp6, temp7;
+		String tempS = druzynyTabela[j];
+		temp1 = rozegraneMeczeTabela[j];
+		temp2=punkty[j];
+		temp3=wygrane[j];
+		temp4=remisy[j];
+		temp5=porazki[j];
+		temp6=bramkiStrzelone[j];
+		temp7=bramkiStracone[j];
+		
+		druzynyTabela[j]=druzynyTabela[j+1];
+		rozegraneMeczeTabela[j]=rozegraneMeczeTabela[j+1];
+		punkty[j]=punkty[j+1];
+		wygrane[j]=wygrane[j+1];
+		remisy[j]=remisy[j+1];
+		porazki[j]=porazki[j+1];
+		bramkiStrzelone[j]=bramkiStrzelone[j+1];
+		bramkiStracone[j]=bramkiStracone[j+1];
+		
+		druzynyTabela[j+1]=tempS;
+		rozegraneMeczeTabela[j+1]=temp1;
+		punkty[j+1]=temp2;
+		wygrane[j+1]=temp3;
+		remisy[j+1]=temp4;
+		porazki[j+1]=temp5;
+		bramkiStrzelone[j+1]=temp6;
+		bramkiStracone[j+1]=temp7;
+	}
+	
+	// zwroc paczke danych do tabeli jak punkty, ilosc meczow itd.
 	public int[][] paczkaDanychTabeli(){
 		return new int[][] {rozegraneMeczeTabela, punkty, wygrane, remisy, porazki, bramkiStrzelone, bramkiStracone};
 	}
 	
+	// zwroc nazwy druzyn na wlasciwych miejscach
 	public String[] druzynyTabeli(){
 		return druzynyTabela;
 	}

@@ -4,7 +4,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class AlfabetycznaListaDruzyn {
-	// zmienne klasy
+	
+	// zmienne klasy AlfabetycznaListaDruzyn
 	private static String[] alfabetycznaListaDruzyn;
 	
 	// konstruowanie klasy
@@ -31,32 +32,13 @@ public class AlfabetycznaListaDruzyn {
 		}
 		
 		// odkomentowanie do zobaczenia listy dru¿yn bior¹cych udzia³ w rozgrywkach
-		for(int i=0; i<alfabetycznaListaDruzyn.length; i++) {
-			System.out.println(alfabetycznaListaDruzyn[i]);
-		}
+//		for(int i=0; i<alfabetycznaListaDruzyn.length; i++) {
+//			System.out.println(alfabetycznaListaDruzyn[i]);
+//		}
 	}
 	
+	// zwroc posortowana liste druzyn
 	public String[] pobierzListeDruzyn() {
 		return alfabetycznaListaDruzyn;
 	}
-
-// lista dru¿yn alfabetycznie do oznaczenia w przysz³ych dzia³aniach
-//	Arka Gdynia - 1
-//	Chrobry G³ogów - 2 
-//	GKS Jastrzêbie - 3
-//	GKS Katowice - 4
-//	GKS Tychy - 5
-//	Górnik Polkowice - 6
-//	Korona Kielce - 7
-//	MiedŸ Legnica - 8
-//	Odra Opole - 9
-//	Podbeskidzie Bielsko-Bia³a - 10
-//	Puszcza Niepo³omice - 11
-//	Resovia - 12
-//	Sandecja Nowy S¹cz - 13
-//	Skra Czêstochowa - 14
-//	Stomil Olsztyn - 15
-//	Widzew £ódŸ - 16
-//	Zag³êbie Sosnowiec - 17
-//	£KS £ódŸ - 18
 }

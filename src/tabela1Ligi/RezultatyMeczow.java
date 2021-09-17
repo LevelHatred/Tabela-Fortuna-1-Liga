@@ -4,13 +4,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class RezultatyMeczow {
-	// zmienne klasy
-	private static String [][] rezultatyMeczow;
-	private static Elements gospodarze, wyniki, goscie;
+	// zmienne klasy RezultatyMeczow
+	private static String [][] rezultatyMeczow; // tablica dwuwymiarowa z wynikami
+	private static Elements gospodarze, wyniki, goscie;  // listy gospodarzy, gosci i wynikow
 	
 	// konstruowanie klasy
-	public RezultatyMeczow(AlfabetycznaListaDruzyn ALD) {
+	public RezultatyMeczow(AlfabetycznaListaDruzyn ALD, WyborLigi WL) {
 		rezultatyMeczow=stworzTabeleRezultatow(ALD);
+		this.pobierzWyniki(WL.dajAdresDoPobraniaDanych());
+		this.uzupelnijWyniki(ALD);
 	}
 	
 	// generowanie tablicy wynikow do tabeli
@@ -26,11 +28,12 @@ public class RezultatyMeczow {
 					tablicaWynikow[gospodarz][gosc]="-:-";
 				}
 			}
-		}
+		} // na przekatnej wygeneruj x, w pozostalych polach miejsce na rezultat
 		return tablicaWynikow;
 	}
-	// pobieranie wyników meczów do listy
-	public void pobierzWyniki(String adresWWW) {
+	
+	// pobieranie wyników meczów do list gospodarzy, gosci i wynikow
+	private void pobierzWyniki(String adresWWW) {
 		Polaczenie polaczenie = new Polaczenie(adresWWW);
 		Document dokument = polaczenie.dajDokument();
 		gospodarze = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_left]").select("p");
@@ -38,7 +41,7 @@ public class RezultatyMeczow {
 		goscie = dokument.select("table[class=kolejka]").select("td[class=td3]").select("div[class=f_right]").select("p");
 	}
 	// przepisywanie wyników z listy do tablicy
-	public void uzupelnijWyniki(AlfabetycznaListaDruzyn ALD) {
+	private void uzupelnijWyniki(AlfabetycznaListaDruzyn ALD) {
 		String[] listaDruzyn = ALD.pobierzListeDruzyn();
 		int liczbaDruzyn = ALD.pobierzListeDruzyn().length;
 		String[] listaGospodarze =gospodarze.html().split("\n");
@@ -71,12 +74,12 @@ public class RezultatyMeczow {
 //			System.out.println(listaGospodarze[i] + " " + listaWyniki[i] + " "+ listaGoscie[i]);
 //		}
 		//tymczasowo wyswietl format wynikow
-		for(int i=0; i<liczbaDruzyn;i++) {
-			for(int j=0; j<liczbaDruzyn;j++) {
-				System.out.print(rezultatyMeczow[i][j]+"\t");
-			}
-			System.out.println();
-		}
+//		for(int i=0; i<liczbaDruzyn;i++) {
+//			for(int j=0; j<liczbaDruzyn;j++) {
+//				System.out.print(rezultatyMeczow[i][j]+"\t");
+//			}
+//			System.out.println();
+//		}
 	}
 	// zwroc tabele rezultatow
 	public String[][] dajRezultatyMeczow(){

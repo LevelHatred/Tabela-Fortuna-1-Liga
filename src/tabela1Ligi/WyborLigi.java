@@ -14,7 +14,7 @@ public class WyborLigi {
 	}
 	
 	KrajLigi krajLigi;
-	private String adresWebDanych, nazwaLigi;
+	private String adresWebDanych;
 	private int[] karnePunkty;
 	private String awansTyp1, awansTyp2, awansTyp3, awansTyp4, spadekTyp1, spadekTyp2;
 	private int aT1, aT2, aT3, aT4, sT1, sT2;
@@ -34,7 +34,6 @@ public class WyborLigi {
 			case ANGLIA:
 				// liczba druzyn 20;
 				adresWebDanych="http://www.polskapilka.net/anglia/";
-				nazwaLigi="Anglia - Premier League";
 				karnePunkty=new int[20];
 				for(int i=0; i<20; i++) {
 					karnePunkty[i]=0;
@@ -56,7 +55,6 @@ public class WyborLigi {
 			case FRANCJA:
 				// liczba druzyn 20 i jedna druzyna kara;
 				adresWebDanych="http://www.polskapilka.net/francja/";
-				nazwaLigi="Francja - Ligue 1";
 				karnePunkty=new int[20];
 				for(int i=0; i<20; i++) {
 					if(i==13) {
@@ -83,7 +81,6 @@ public class WyborLigi {
 			case HISZPANIA:
 				// liczba druzyn 20;
 				adresWebDanych="http://www.polskapilka.net/hiszpania/";
-				nazwaLigi="Hiszpania - La Liga";
 				karnePunkty=new int[20];
 				for(int i=0; i<20; i++) {
 					karnePunkty[i]=0;
@@ -105,7 +102,6 @@ public class WyborLigi {
 			case NIEMCY:
 				// liczba druzyn 18;
 				adresWebDanych="http://www.polskapilka.net/niemcy/";
-				nazwaLigi="Niemcy - Bundesliga";
 				karnePunkty=new int[18];
 				for(int i=0; i<18; i++) {
 					karnePunkty[i]=0;
@@ -127,7 +123,6 @@ public class WyborLigi {
 			case POLSKA_EKSTRAKLASA:
 				// liczba druzyn 18;
 				adresWebDanych="http://www.polskapilka.net/ekstraklasa/";
-				nazwaLigi="Polska - PKO Ekstraklasa";
 				karnePunkty=new int[18];
 				for(int i=0; i<18; i++) {
 					karnePunkty[i]=0;
@@ -149,7 +144,6 @@ public class WyborLigi {
 			case POLSKA_1_LIGA:
 				// liczba druzyn 18;
 				adresWebDanych="http://www.polskapilka.net/1-liga/";
-				nazwaLigi="Polska - Fortuna 1 Liga";
 				karnePunkty=new int[18];
 				for(int i=0; i<18; i++) {
 					karnePunkty[i]=0;
@@ -171,7 +165,6 @@ public class WyborLigi {
 			case POLSKA_2_LIGA:
 				// liczba druzyn 18 i jedna druzyna kara;
 				adresWebDanych="http://www.polskapilka.net/2-liga/";
-				nazwaLigi="Polska - 2 Liga";
 				karnePunkty=new int[18];
 				for(int i=0; i<18; i++) {
 					if(i==1) {
@@ -198,7 +191,6 @@ public class WyborLigi {
 			case W£OCHY:
 				// liczba druzyn 20;
 				adresWebDanych="http://www.polskapilka.net/wlochy/";
-				nazwaLigi="W³ochy - Serie A";
 				karnePunkty=new int[20];
 				for(int i=0; i<20; i++) {
 					karnePunkty[i]=0;
@@ -216,11 +208,32 @@ public class WyborLigi {
 				spadekTyp2="";
 				sT2=0;
 				break;
+				
 			default:
 				break;
 		}
 	}
+	
+	// zwroc adres html
 	public String dajAdresDoPobraniaDanych() {
 		return adresWebDanych;
+	}
+	
+	// daj tablice karnych punktow
+	public int[] pobierzKarnePunkty() {
+		return karnePunkty;
+	}
+	
+	// zwroc informacje o awansach i spadkach
+	public String[] tekstyDoKolorowania() {
+		return new String[] {awansTyp1, awansTyp2, awansTyp3, awansTyp4, spadekTyp1, spadekTyp2};
+	}
+	// zwroc liczbe wierszy do zmian koloru
+	public int[] liczbaDoKolorowania() {
+		return new int[] {aT1, aT2, aT3, aT4, sT1, sT2};
+	}
+	// zwroc tablice kolorow zmian wierszy
+	public int[][] tablicaKolorow() {
+		return new int[][] {kolorAT1, kolorAT2, kolorAT3, kolorAT4, kolorST1, kolorST2};
 	}
 }
