@@ -26,7 +26,7 @@ public class WyborLigi {
 		krajLigi=KL;
 		kolorAT1=new int[] {0,155,0};
 		kolorAT2=new int[] {0,255,0};
-		kolorAT3=new int[] {0,0,255};
+		kolorAT3=new int[] {0,120,255};
 		kolorAT4=new int[] {0,180,255};
 		kolorST1=new int[] {255,0,0};
 		kolorST2=new int[] {255,120,0};
