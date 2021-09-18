@@ -10,6 +10,7 @@ public class AlfabetycznaListaDruzyn {
 	
 	// konstruowanie klasy
 	public AlfabetycznaListaDruzyn(String adresWWW) {
+		
 		// ³¹czenie siê z baz¹ informacji
 		Polaczenie polaczenie = new Polaczenie(adresWWW);
 		Document dokument = polaczenie.dajDokument();

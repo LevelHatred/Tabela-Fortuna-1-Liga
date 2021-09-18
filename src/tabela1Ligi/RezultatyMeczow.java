@@ -4,9 +4,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class RezultatyMeczow {
+	
 	// zmienne klasy RezultatyMeczow
 	private static String [][] rezultatyMeczow; // tablica dwuwymiarowa z wynikami
 	private static Elements gospodarze, wyniki, goscie;  // listy gospodarzy, gosci i wynikow
+	private String[] listaGospodarze, listaWyniki, listaGoscie; 
+
 	
 	// konstruowanie klasy
 	public RezultatyMeczow(AlfabetycznaListaDruzyn ALD, WyborLigi WL) {
@@ -43,10 +46,26 @@ public class RezultatyMeczow {
 	// przepisywanie wyników z listy do tablicy
 	private void uzupelnijWyniki(AlfabetycznaListaDruzyn ALD) {
 		String[] listaDruzyn = ALD.pobierzListeDruzyn();
-		int liczbaDruzyn = ALD.pobierzListeDruzyn().length;
-		String[] listaGospodarze =gospodarze.html().split("\n");
-		String[] listaWyniki = wyniki.html().split("\n");
-		String[] listaGoscie = goscie.html().split("\n");
+		int liczbaDruzyn = listaDruzyn.length;
+		
+		listaGospodarze =gospodarze.html().split("\n");
+		String[] tempListaWyniki = wyniki.html().split("\n");
+		listaGoscie = goscie.html().split("\n");	
+
+		listaWyniki = new String[listaGospodarze.length];
+		int nrBledny=0;
+		for(int i=0; i<tempListaWyniki.length; i++) {
+			if(tempListaWyniki[i].equals("<br>Odwo³any")) {
+				nrBledny++;
+				continue;
+			}
+			else {
+				listaWyniki[i-nrBledny] = tempListaWyniki[i];
+			}
+		}
+		
+
+		
 		int nrGospodarza=0;
 		int nrGoscia=0;
 		for(int i=0; i<listaGospodarze.length; i++) {
@@ -84,5 +103,9 @@ public class RezultatyMeczow {
 	// zwroc tabele rezultatow
 	public String[][] dajRezultatyMeczow(){
 		return rezultatyMeczow;
+	}
+	
+	public String[][] dajCiagKolejek() {
+		return new String[][] {listaGospodarze, listaWyniki, listaGoscie};
 	}
 }

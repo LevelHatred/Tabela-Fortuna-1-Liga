@@ -1,6 +1,7 @@
 package tabela1Ligi;
 
 public class Tabela {
+	
 	// zmienne klasy
 	String[] druzynyTabela;
 	private int[] rozegraneMeczeTabela;
@@ -13,6 +14,7 @@ public class Tabela {
 	
 	// konstruowanie klasy
 	public Tabela(AlfabetycznaListaDruzyn alfabetycznaListaDruzyn, RezultatyMeczow rezultatyMeczow, WyborLigi wyborLigi) {
+		
 		// inicjowanie danych tabeli
 		int liczbaDruzyn=rezultatyMeczow.dajRezultatyMeczow().length;
 		druzynyTabela = new String[liczbaDruzyn];
@@ -23,12 +25,14 @@ public class Tabela {
 		porazki = new int[liczbaDruzyn];
 		bramkiStrzelone = new int[liczbaDruzyn];
 		bramkiStracone = new int[liczbaDruzyn];
+		
 		// zaimportowanie karnych punktow;
 		int[] karnePunkty = wyborLigi.pobierzKarnePunkty();
+		String[] ALD = alfabetycznaListaDruzyn.pobierzListeDruzyn();
 		
 		// wypelnianie danych takich jak mecze, bramki etc druzyn zerami i dodanie karnych punktow
 		for(int i=0; i<liczbaDruzyn; i++) {
-			druzynyTabela[i]=alfabetycznaListaDruzyn.pobierzListeDruzyn()[i];
+			druzynyTabela[i]=ALD[i];
 			rozegraneMeczeTabela[i]=0;
 			punkty[i]=karnePunkty[i];
 			wygrane[i]=0;
@@ -36,7 +40,6 @@ public class Tabela {
 			porazki[i]=0;
 			bramkiStrzelone[i]=0;
 			bramkiStracone[i]=0;
-			
 		}
 		
 		// uwzglednianie rezultatow meczy do tabeli

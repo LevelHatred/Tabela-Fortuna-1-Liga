@@ -18,7 +18,6 @@ public class Polaczenie {
 		try {
 			dokument = polaczenie.get();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

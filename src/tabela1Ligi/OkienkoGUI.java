@@ -1,6 +1,5 @@
 package tabela1Ligi;
 
-// import bibliotek
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,17 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
+import javax.swing.text.JTextComponent;
 
 import tabela1Ligi.WyborLigi.KrajLigi;
 
@@ -32,17 +33,24 @@ public class OkienkoGUI extends JFrame{
 	private static final long serialVersionUID = -4982292960425747281L; // usuniecie jakiegos warninga zwiazanego z JFrame
 
 	// zmienne klasy OkienkoGUI
-	private Container kontenerBorderCenter = new Container(); // kontener wewnatrz glownego centralnego layoutu
-	private JScrollPane suwakTabeli = new JScrollPane(); // suwak do tabeli
-	private JTable tabelaJT; // tabela wsadzana do suwaka i do kontenera w srodku
 	
-	private Vector<String> naglowki = new Vector<>();
+	// kontenery do elementow
+	private Container kontenerBorderCenter = new Container(); // glowny centralny layout
+	private Container kontenerBorderNorth = new Container(); // glowny polnocny layout
+	private Container kontenerBorderSouth = new Container(); // glowny poludniowy layout
+	
+	// elementy wizualne tabeli
+	private JScrollPane suwakTabeli; // suwak do tabeli
+	private JTable tabelaJT; // tabela wsadzana do suwaka
+	private JLabel legendaJL = new JLabel(); // opis legendy
+	private JButton pokazTerminarzJB = new JButton("Poka¿ terminarz");
+	
+	// dane tabeli
+	private Vector<String> naglowki = new Vector<>(); // naglowki
 	private Vector<Vector<String>> dane = new Vector<>(); // wektor danych 
 	
-	private Container kontenerBorderNorth = new Container(); // kontener wewn¹trz glownego polnocnego layoutu
-	private Container kontenerBorderSouth = new Container(); // kontener wewn¹trz glownego poludniowego layoutu
-	
-	private JComboBox<String> wyborLigiJCB; // JComboBox do kontenera polnocnego z wyborem ligi do wyswietlania tabeli
+	// mozliwosc wyboru ligi
+	private JComboBox<String> wyborLigiJCB; // JComboBox z wyborem ligi
 	private String[] magazynNazwLig = new String[] {"Anglia - Premier League",
 			"Francja - Ligue 1",
 			"Hiszpania - La Liga",
@@ -51,10 +59,9 @@ public class OkienkoGUI extends JFrame{
 			"Polska - Fortuna 1 Liga",
 			"Polska - 2 Liga",
 			"W³ochy - Serie A"}; // lista nag³ówków do JComboBoxa
+	private WyborLigi wyborLigi; // klasa z pakietem informacji jak adresHTML do poboru danych, karne punkty itd. przy wybraniu JComboBoxa
 	
-	private WyborLigi wyborLigi; // klasa z pakietem informacji jak adresHTML do poboru danych, karne punkty itd.
-	
-	private DefaultTableCellRenderer[][] renderKomorek;
+
 	
 	// konstruowanie klasy
 	public OkienkoGUI() {
@@ -62,6 +69,7 @@ public class OkienkoGUI extends JFrame{
 		zagospodarujPolnocGlownegoLayoutu();
 		zagospodarujCentrumGlownegoLayoutu();
 		szerokoscNaglowkowTabeli(683, new double[] {1,7,1,1,1,1,1,1,1}); // ustaw szerokosc naglowkow dla preferowanego udzialu ulamkowego
+		zagospodarujPoludnieGlownegoLayoutu();
 		eventy();
 		
 	}
@@ -70,13 +78,15 @@ public class OkienkoGUI extends JFrame{
 	private void stworzGUI() {
 		this.setTitle("Tabele rozgrywek pi³karskich");
 		this.setLayout(new BorderLayout(10,10));
-		this.setSize(683, 500);
+		this.setSize(683, 600);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // wcisniecie krzyzyka okienka wylacza dzialanie programu
 	}
 	
+	// stworz wyglad polnocnego layoutu
 	private void zagospodarujPolnocGlownegoLayoutu() {
 		dodanieWyboruLigi(); // dodaj w glownym polnocnym layoucie JComboBox z naglowkami lig
+		kontenerBorderNorth.add(pokazTerminarzJB);
 	}
 	
 	// dodanie kontenera do polnocnego glownego layoutu, zdefiniowanie JComboBoxa, ustawienie layoutu kontenera, dodanie JCB
@@ -88,10 +98,12 @@ public class OkienkoGUI extends JFrame{
 		wyborLigiJCB.setSelectedItem(magazynNazwLig[5]); // ustawienie pierwszej domyslnej wartosci JComboBoxa
 	}
 	
+	// stworz wyglad centralnego layoutu
 	private void zagospodarujCentrumGlownegoLayoutu() {
 		dodanieNaglowkowTabeli(); // pakiet instrukcji dajacych naglowki tabeli
-		dodanieTabeli();
-		wstawienieTabeliDoKontenera();
+		stworzenieTresciTabeli(); // pobranie wlasciwych danych tabeli
+		przygotowanieWygladuTabeli(); // generowanie instrukcji ktore zmianiaja wyglad tabeli, nawet przy zmianie pobranych danych
+		wstawienieTabeliDoKontenera(); // wstawienie tabeli do kontenera
 		
 	}
 	
@@ -106,17 +118,11 @@ public class OkienkoGUI extends JFrame{
 		naglowki.add("P");
 		naglowki.add("BZ");
 		naglowki.add("BS");
-		
-	}
-
-	private void dodanieTabeli() {
-		
-		przygotowanieWygladuTabeli();
-		stworzenieTresciTabeli();
 	}
 	
+	// pobranie danych do tabeli ktore wynikaja z wyboru jComboBoxa
 	private void stworzenieTresciTabeli() {
-		wyborLigi = this.odczytajWskazanieJComboBoxa(); // wybierz wlasciwego enuma
+		wyborLigi = this.odczytajWskazanieJComboBoxa(); // wybierz wlasciwego enuma na bazie JComboBoxa
 		AlfabetycznaListaDruzyn alfabetycznaListaDruzyn = new AlfabetycznaListaDruzyn(wyborLigi.dajAdresDoPobraniaDanych()); // stworz obiekt z lista druzyn
 		RezultatyMeczow rezultatyMeczow = new RezultatyMeczow(alfabetycznaListaDruzyn, wyborLigi); // zbierz rezultaty meczow
 		Tabela tabela = new Tabela(alfabetycznaListaDruzyn, rezultatyMeczow, wyborLigi); // stworz tabele
@@ -125,28 +131,29 @@ public class OkienkoGUI extends JFrame{
 	
 	// przekaz wskazanie JComboBoxa do wybrania wlasciwego enuma z poczatkowymi danymi
 	private WyborLigi odczytajWskazanieJComboBoxa() {
-		if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[0])) {
+		Object aktualnyWybor = wyborLigiJCB.getSelectedItem();
+		if(aktualnyWybor.equals(magazynNazwLig[0])) {
 			return new WyborLigi(KrajLigi.ANGLIA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[1])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[1])) {
 			return new WyborLigi(KrajLigi.FRANCJA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[2])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[2])) {
 			return new WyborLigi(KrajLigi.HISZPANIA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[3])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[3])) {
 			return new WyborLigi(KrajLigi.NIEMCY);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[4])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[4])) {
 			return new WyborLigi(KrajLigi.POLSKA_EKSTRAKLASA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[5])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[5])) {
 			return new WyborLigi(KrajLigi.POLSKA_1_LIGA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[6])) {
+		else if(aktualnyWybor.equals(magazynNazwLig[6])) {
 			return new WyborLigi(KrajLigi.POLSKA_2_LIGA);
 		}
-		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[7])){
+		else if(aktualnyWybor.equals(magazynNazwLig[7])){
 			return new WyborLigi(KrajLigi.W£OCHY);
 		}
 		return new WyborLigi(KrajLigi.POLSKA_1_LIGA);
@@ -177,6 +184,7 @@ public class OkienkoGUI extends JFrame{
 		}
 	}
 	
+	// przygotowanie wygladu tabeli, wysrodkowanie wlasciwych kolumn i malowanie wierszy
 	private void przygotowanieWygladuTabeli() {
 		
 		tabelaJT = new JTable(dane, naglowki) 
@@ -185,8 +193,9 @@ public class OkienkoGUI extends JFrame{
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = -8598422295593414811L;
+			private static final long serialVersionUID = -8598422295593414811L; // usuniecie jakiegos warninga
 			
+			// prerenderer tabeli czyli malowanie tla i srodkowanie napisow w komorkach
 			@Override
             public Component prepareRenderer(TableCellRenderer renderer, int wiersz, int kolumna) {
 				int[] paczka1 = wyborLigi.liczbaDoKolorowania();
@@ -231,8 +240,9 @@ public class OkienkoGUI extends JFrame{
                 }
                 return comp;
             }
-		}
-		; // stworz tabele z naglowkami zdefiniowanymi wczesniej	
+		};
+		
+		// wysrodkuj elementy kolumn tabeli oprocz drugiej kolumny
 		for (int i=0; i < tabelaJT.getColumnModel().getColumnCount(); i++) {
 			if(i==1) {
 				continue;
@@ -240,8 +250,7 @@ public class OkienkoGUI extends JFrame{
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 			tabelaJT.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
-		} // wysrodkuj elementy kolumn tabeli oprocz drugiej kolumny
-		
+		} 
 	}
 	
 	// dodaj tabelê do suwaka, wstaw kontener do centralnego layoutu, kontener ustaw na GridLayout i do kontenera dodaj suwak z tabel¹
@@ -265,6 +274,83 @@ public class OkienkoGUI extends JFrame{
 			kolumna.setPreferredWidth((int) (szerokoscTabeli * (wypelnienie[i] / suma)));
 		} // ustaw preferowane szerokosci kolumn
 	}
+	
+	private void zagospodarujPoludnieGlownegoLayoutu() {
+		this.add(kontenerBorderSouth, BorderLayout.SOUTH);
+		kontenerBorderSouth.setLayout(new GridLayout(1,1,10,10));
+		kontenerBorderSouth.add(legendaJL);
+		dodanieLegendy();
+		dodanieOpisuKolorow();
+	}
+
+	private void dodanieLegendy() {
+		String tekstLegendy = "<html>&nbsp;Legenda:<br/>"
+				+ "&nbsp;Lp - miejsce&nbsp;&nbsp;&nbsp;"
+				+ "&nbsp;M - iloœæ rozegranych meczów&nbsp;&nbsp;&nbsp;"
+				+ "&nbsp;Pkt - iloœæ zdobytych punktów<br/>"
+				+ "&nbsp;W - iloœæ wygranych&nbsp;&nbsp;&nbsp;"
+				+ "&nbsp;R - iloœæ remisów&nbsp;&nbsp;&nbsp;"
+				+ "&nbsp;P - iloœæ pora¿ek<br/>"
+				+ "&nbsp;BZ - bramki zdobyte&nbsp;&nbsp;&nbsp;"
+				+ "&nbsp;BS - bramki stracone</html>";
+		
+		if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[1])) {
+			tekstLegendy=tekstLegendy.substring(0,tekstLegendy.length()-7);
+			tekstLegendy=tekstLegendy+"<br/>&nbsp;Nice -1 punkt</html>";
+		}
+		else if(wyborLigiJCB.getSelectedItem().equals(magazynNazwLig[6])) {
+			tekstLegendy=tekstLegendy.substring(0,tekstLegendy.length()-7);
+			tekstLegendy=tekstLegendy+"<br/>&nbsp;GKS Be³chatów -4 punkty</html>";
+		}
+		legendaJL.setText(tekstLegendy);
+	}
+	
+	private void dodanieOpisuKolorow() {
+		String tekst=legendaJL.getText();
+		int[] paczka1 = wyborLigi.liczbaDoKolorowania();
+		int[][] paczka2 = wyborLigi.tablicaKolorow();
+		String[] paczka3 = wyborLigi.tekstyDoKolorowania();
+		
+		if(paczka1[0]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[0][0])+","+Integer.toString(paczka2[0][1])+","+Integer.toString(paczka2[0][2])+");\">&nbsp;"
+					+ paczka3[0] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		if(paczka1[1]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[1][0])+","+Integer.toString(paczka2[1][1])+","+Integer.toString(paczka2[1][2])+");\">&nbsp;"
+					+ paczka3[1] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		if(paczka1[2]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[2][0])+","+Integer.toString(paczka2[2][1])+","+Integer.toString(paczka2[2][2])+");\">&nbsp;"
+					+ paczka3[2] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		if(paczka1[3]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[3][0])+","+Integer.toString(paczka2[3][1])+","+Integer.toString(paczka2[3][2])+");\">&nbsp;"
+					+ paczka3[3] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		if(paczka1[4]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[4][0])+","+Integer.toString(paczka2[4][1])+","+Integer.toString(paczka2[4][2])+");\">&nbsp;"
+					+ paczka3[4] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		if(paczka1[5]!=0) {
+			tekst=tekst.substring(0,tekst.length()-7);
+			tekst = tekst + "<p style=\"color:rgb("+Integer.toString(paczka2[5][0])+","+Integer.toString(paczka2[5][1])+","+Integer.toString(paczka2[5][2])+");\">&nbsp;"
+					+ paczka3[5] + "</p></html>";
+			//tekst = tekst + "asdasdasd</html>";
+		}
+		legendaJL.setText(tekst);
+
+		//System.out.println(tekst);
+	}
 
 	// eventy wystepujace na zmiane sytuacji lub przycisk
 	private void eventy() {
@@ -272,11 +358,23 @@ public class OkienkoGUI extends JFrame{
 		    public void actionPerformed(ActionEvent e) {
 		    	long startTime = System.currentTimeMillis();
 		    	stworzenieTresciTabeli();
+		    	dodanieLegendy();
+		    	dodanieOpisuKolorow();
 		    	((DefaultTableModel)(tabelaJT.getModel())).fireTableDataChanged();
 		        long estimatedTime = System.currentTimeMillis()-startTime;
 		        System.out.println("Czas poboru danych - " + estimatedTime);
 		    }
 		});
 		
+		pokazTerminarzJB.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AlfabetycznaListaDruzyn alfabetycznaListaDruzyn = new AlfabetycznaListaDruzyn(wyborLigi.dajAdresDoPobraniaDanych()); // stworz obiekt z lista druzyn
+				RezultatyMeczow rezultatyMeczow = new RezultatyMeczow(alfabetycznaListaDruzyn, wyborLigi); // zbierz rezultaty meczow
+				OkienkoJDialog okienkoJDialog = new OkienkoJDialog(rezultatyMeczow);
+				okienkoJDialog.setVisible(true);
+			}
+		});
 	}
 }

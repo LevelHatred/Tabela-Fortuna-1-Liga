@@ -2,6 +2,7 @@ package tabela1Ligi;
 
 public class WyborLigi {
 	
+	// typy enum czyli mozliwe ligi
 	public enum KrajLigi {
 		ANGLIA,
 		FRANCJA,
@@ -13,19 +14,20 @@ public class WyborLigi {
 		W£OCHY;
 	}
 	
-	KrajLigi krajLigi;
-	private String adresWebDanych;
-	private int[] karnePunkty;
-	private String awansTyp1, awansTyp2, awansTyp3, awansTyp4, spadekTyp1, spadekTyp2;
-	private int aT1, aT2, aT3, aT4, sT1, sT2;
-	private int[] kolorAT1, kolorAT2, kolorAT3, kolorAT4, kolorST1, kolorST2;
+	// zmienne klasy
+	KrajLigi krajLigi; // typ enum
+	private String adresWebDanych; // adres strony do pobrania danych
+	private int[] karnePunkty; // tabela karnych punktow
+	private String awansTyp1, awansTyp2, awansTyp3, awansTyp4, spadekTyp1, spadekTyp2; // teksty do legendy o awansach i spadkach
+	private int aT1, aT2, aT3, aT4, sT1, sT2; // liczba druzyn do awansow i spadkow
+	private int[] kolorAT1, kolorAT2, kolorAT3, kolorAT4, kolorST1, kolorST2; // kolory RGB tla tabeli dla druzyn z awansow i spadkow
 	
 	
-	
+	// konstruowanie klasy
 	public WyborLigi(KrajLigi KL) {
 		krajLigi=KL;
-		kolorAT1=new int[] {0,155,0};
-		kolorAT2=new int[] {0,255,0};
+		kolorAT1=new int[] {0,120,0};
+		kolorAT2=new int[] {0,200,0};
 		kolorAT3=new int[] {0,120,255};
 		kolorAT4=new int[] {0,180,255};
 		kolorST1=new int[] {255,0,0};
@@ -56,6 +58,7 @@ public class WyborLigi {
 				// liczba druzyn 20 i jedna druzyna kara;
 				adresWebDanych="http://www.polskapilka.net/francja/";
 				karnePunkty=new int[20];
+				// Nice -1 punkt
 				for(int i=0; i<20; i++) {
 					if(i==13) {
 						karnePunkty[i]=-1;
@@ -166,6 +169,7 @@ public class WyborLigi {
 				// liczba druzyn 18 i jedna druzyna kara;
 				adresWebDanych="http://www.polskapilka.net/2-liga/";
 				karnePunkty=new int[18];
+				// GKS Belchatow -4 punkty
 				for(int i=0; i<18; i++) {
 					if(i==1) {
 						karnePunkty[i]=-4;
