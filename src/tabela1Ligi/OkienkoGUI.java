@@ -229,10 +229,10 @@ public class OkienkoGUI extends JFrame{
                 else if (wiersz<aT1+aT2+aT3+aT4){
                 	comp.setBackground(new Color(kolorAT4[0], kolorAT4[1], kolorAT4[2]));
                 }
-                else if (wiersz>liczbaDruzyn-sT1) {
+                else if (wiersz>=liczbaDruzyn-sT1) {
                 	comp.setBackground(new Color(kolorST1[0], kolorST1[1], kolorST1[2]));
                 }
-                else if (wiersz>liczbaDruzyn-sT1-sT2) {
+                else if (wiersz>=liczbaDruzyn-sT1-sT2) {
                 	comp.setBackground(new Color(kolorST2[0], kolorST2[1], kolorST2[2]));
                 }
                 else {

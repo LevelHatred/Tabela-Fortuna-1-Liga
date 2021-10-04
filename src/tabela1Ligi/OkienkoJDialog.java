@@ -88,6 +88,9 @@ public class OkienkoJDialog extends JDialog {
 		    	((DefaultTableModel)(wynikiKolejkiJT.getModel())).fireTableDataChanged();
 		    }
 		});
+		
+		wynikiKolejkiJT.setDefaultEditor(Object.class, null); // brak mo¿liwoœci edytowania komórki tabeli
+		wynikiKolejkiJT.getTableHeader().setReorderingAllowed(false); // brak reorganizacji kolejnoœci kolumn tabeli
 	}
 
 	private void inicjalizacjaJDialog() {
